@@ -1,21 +1,22 @@
-import 'dotenv/config';
-import { Agent, run, tool } from '@openai/agents';
-import { RECOMMENDED_PROMPT_PREFIX } from '@openai/agents-core/extensions';
-import { z } from 'zod';
-import { email } from 'zod/v4';
-
+import "dotenv/config";
+import { Agent, run, tool } from "@openai/agents";
+import { RECOMMENDED_PROMPT_PREFIX } from "@openai/agents-core/extensions";
+import { z } from "zod";
 
 // =======================EMAXPLE 1===============================================
 // const roxAgent = new Agent({
-//     name: "ROX",
-//     instructions: "You are ROX, a 20x Hackathon winner. You have in depth knowlege of how to win hackathons and build products that win awards.",
-// })
-
-// run(roxAgent, "Hello, how are you?").then(result => {
-//     console.log(result.finalOutput);
-// }).catch(error => {
-//     console.error(error);
+//   name: "ROX",
+//   instructions:
+//     "You are ROX, a 20x Hackathon winner. You have in depth knowlege of how to win hackathons and build products that win awards.",
 // });
+
+// run(roxAgent, "Hello, how are you?")
+//   .then((result) => {
+//     console.log(result.finalOutput);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
 
 // =======================EMAXPLE 2===============================================
 
@@ -44,39 +45,51 @@ import { email } from 'zod/v4';
 // });
 
 // =======================EMAXPLE 3===============================================
-// const getWeather = tool({
-//     name: 'get_weather',
-//     description: 'Return the weather for a given city.',
-//     parameters: z.object({ city: z.string() }),
-//     async execute({ city }) {
-//         console.log(`Getting weather for ${city}.`);
-//         return `The weather in ${city} is sunny.`;
-//     },
-// });
+const getWeather = tool({
+  name: "get_weather",
+  description: "Return the weather for a given city.",
+  parameters: z.object({ city: z.string() }),
+  async execute({ city }) {
+    console.log(`Getting weather for ${city}.`);
+    return `The weather in ${city} is sunny.`;
+  },
+});
 
-// const email = tool({
-//     name: "send-email",
-//     description: "Send an email to a given email address.",
-//     parameters: z.object({ to: z.string(), subject: z.string(), body: z.string() }),
-//     async execute({ to, subject, body }) {
-//         console.log(`Email sent to ${to} with subject ${subject} and body ${body}.`);
-//         return `Email sent to ${to} with subject ${subject} and body ${body}.`;
-//     },
-// })
+const email = tool({
+  name: "send-email",
+  description: "Send an email to a given email address.",
+  parameters: z.object({
+    to: z.string(),
+    subject: z.string(),
+    body: z.string(),
+  }),
+  async execute({ to, subject, body }) {
+    console.log(
+      `Email sent to ${to} with subject ${subject} and body ${body}.`
+    );
+    return `Email sent to ${to} with subject ${subject} and body ${body}.`;
+  },
+});
 
-// const agent = new Agent({
-//     name: "Assistant",
-//     instructions: "You are a helpful assistant and u need to help the user with their questions and problems.",
-//     tools: [getWeather, email],
-//     model: "gpt-4o-mini",
-//     maxTokens: 50,
-// });
+const agent = new Agent({
+  name: "Assistant",
+  instructions:
+    "You are a helpful assistant and u need to help the user with their questions and problems. you are given with 2 tools that u can use , get weather or send email.",
+  tools: [getWeather, email],
+  model: "gpt-4o-mini",
+  maxTokens: 50,
+});
 
-// run(agent, "Hello, kindly send the temperature of new york to ronitrai1237@gmail.com").then(result => {
-//     console.log(result.finalOutput);
-// }).catch(error => {
-//     console.error(error);
-// });
+run(
+  agent,
+  "Hello, kindly send the temperature of new york to ronitrai1237@gmail.com"
+)
+  .then((result) => {
+    console.log(result.finalOutput);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
 // =======================EMAXPLE 4===============================================
 
@@ -95,7 +108,6 @@ import { email } from 'zod/v4';
 //     },
 // });
 
-
 // const agent = new Agent({
 //     name: "Assistant",
 //     instructions: "You are a Weather assistant and u need to help the user with their questions and problems.",
@@ -110,7 +122,6 @@ import { email } from 'zod/v4';
 // }).catch(error => {
 //     console.error(error);
 // });
-
 
 // =======================EMAXPLE 5===============================================
 
@@ -155,7 +166,6 @@ import { email } from 'zod/v4';
 //     },
 // });
 
-
 // const RefundAgent = new Agent({
 //     name: "Refund Agent",
 //     instructions: "You are a Refund agent and u need to help the user with refunds, for refund u only need name and plan.",
@@ -175,14 +185,11 @@ import { email } from 'zod/v4';
 //     // maxTokens: 50,
 // });
 
-
-
 // run(SalesAgent, "Hello, can u make refund of my plan 100MB. my name is Ronit Rai").then(result => {
 //     console.log(result.finalOutput);
 // }).catch(error => {
 //     console.error(error);
 // });
-
 
 // =====================================================EXAMPLE 6 (HANDOFFS)=======================
 // REFUND AGENT
@@ -308,7 +315,6 @@ import { email } from 'zod/v4';
 //     // model: "gpt-4.1-mini",
 // });
 
-
 // async function main(q = '') {
 //     sharedHistory.push({ role: "user", content: q })
 //     const result = await run(newAgent, sharedHistory)
@@ -360,7 +366,6 @@ import { email } from 'zod/v4';
 //     tools: [dbSchema],
 //     // model: "gpt-4.1-mini",
 // });
-
 
 // async function main(q = '') {
 //     const result = await run(newAgent, q, {
